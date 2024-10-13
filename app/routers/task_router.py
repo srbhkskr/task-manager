@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from fastapi import status
@@ -22,7 +23,9 @@ def create_task(task: PostTaskRequest, db: Session = Depends(get_db)):
     db.add(task_entity)
     db.commit()
     db.refresh(task_entity)
-    return
+
+    headers = {"x-task-id": str(task_entity.id)}
+    return JSONResponse(content=None, headers=headers)
 
 @router.get("/", )
 def get_tasks(db: Session = Depends(get_db)):
@@ -59,7 +62,7 @@ def update_task(task_id: int, updated_task: UpdateTaskRequest, db: Session = Dep
     logger.info(f"task {task_id} updated {task_from_db}")
     return task_from_db
 
-@router.delete("/{task_id}")
+@router.delete("/{task_id}", status_code = status.HTTP_204_NO_CONTENT)
 def delete_task(task_id: int, db: Session = Depends(get_db)):
     logger.info(f"Got request to delete task {task_id}")
     task_from_db = db.query(Task).where(Task.id == task_id).first()
