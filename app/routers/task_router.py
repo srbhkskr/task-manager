@@ -54,9 +54,7 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
         return
 
     db.delete(task_from_db)
-
     db.commit()
-    db.flush()
 
     logger.info("task deleted")
     return
