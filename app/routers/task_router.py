@@ -30,7 +30,7 @@ def get_tasks(db: Session = Depends(get_db)):
 @router.put("/{task_id}")
 def update_task(task_id: int, updated_task: UpdateTaskRequest, db: Session = Depends(get_db)):
 
-    task_from_db = db.query(Task).where(Task.id == task_id).first()
+    task_from_db = db.query(Task).where(Task.id.match(task_id)).first()
     if updated_task.title:
         task_from_db.title = updated_task.title
     if updated_task.description:
@@ -47,7 +47,7 @@ def update_task(task_id: int, updated_task: UpdateTaskRequest, db: Session = Dep
 @router.delete("/{task_id}")
 def delete_task(task_id: int, db: Session = Depends(get_db)):
 
-    task_from_db = db.query(Task).where(Task.id == task_id).first()
+    task_from_db = db.query(Task).where(Task.id.match(task_id)).first()
 
 
     if not task_from_db:
