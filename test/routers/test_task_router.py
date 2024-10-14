@@ -16,6 +16,12 @@ def test_create_task(test_db):
 
     assert response.status_code == 201
 
+def test_create_task_should_fail_on_missing_title(test_db):
+    response = client.post("/tasks/", json={
+        "description": "This is a test task"
+    })
+    assert response.status_code == 422
+
 
 def test_get_tasks(test_db):
     client.post("/tasks/", json={
@@ -37,8 +43,6 @@ def test_get_tasks(test_db):
         "description": "This is a test task"
     }
     mock_response.json.return_value = response_dict
-
-
 
 
 def test_update_task(test_db):
@@ -64,6 +68,18 @@ def test_update_task(test_db):
     assert "created_at" in data
     assert "updated_at" in data
 
+def test_update_task_should_return_404_on_id_not_found(test_db):
+
+    task_id = 100
+    response = client.put(f"/tasks/{task_id}", json={
+        "title": "Updated Task",
+        "description": "Updated description",
+        "status": "Doing"
+    })
+
+    assert response.status_code == 404
+
+
 
 
 def test_delete_task(test_db):
@@ -77,4 +93,11 @@ def test_delete_task(test_db):
     response = client.delete(f"/tasks/{task_id}")
 
     assert response.status_code == 204
+
+def test_delete_task_should_return_404_on_id_not_found(test_db):
+
+    task_id = 100
+    response = client.delete(f"/tasks/{task_id}")
+
+    assert response.status_code == 404
 
