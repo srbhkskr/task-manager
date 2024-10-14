@@ -25,7 +25,7 @@ def create_task(task: PostTaskRequest, db: Session = Depends(get_db)):
     db.refresh(task_entity)
 
     headers = {"x-task-id": str(task_entity.id)}
-    return JSONResponse(content=None, headers=headers)
+    return JSONResponse(content=None, headers=headers, status_code=status.HTTP_201_CREATED)
 
 @router.get("/", )
 def get_tasks(db: Session = Depends(get_db)):
