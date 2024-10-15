@@ -8,7 +8,7 @@ from ..db.base import Base
 
 
 class TaskStatus(str, Enum):
-    TO_DO = 'To Do'
+    TO_DO = 'ToDo'
     DOING = 'Doing'
     DONE = 'Done'
 
