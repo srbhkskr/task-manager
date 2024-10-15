@@ -59,6 +59,15 @@ function createTaskElement(task) {
     const taskDiv = document.createElement("div");
     taskDiv.classList.add("task");
 
+    // Assign a class based on the task status
+    if (task.status === "To Do") {
+        taskDiv.classList.add("todo");
+    } else if (task.status === "Doing") {
+        taskDiv.classList.add("doing");
+    } else if (task.status === "Done") {
+        taskDiv.classList.add("done");
+    }
+
     const taskTitle = document.createElement("h3");
     taskTitle.textContent = task.title;
 

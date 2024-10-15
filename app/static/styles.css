@@ -17,13 +17,17 @@ h1, h2 {
     color: #333;
 }
 
+p {
+    color: #333;
+}
+
 .task-form {
     margin-bottom: 20px;
 }
 
 .task-form input,
 .task-form textarea {
-    width: 100%;
+    width: 97%;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 4px;
@@ -44,7 +48,7 @@ button:hover {
 }
 
 .task {
-    background-color: #f9f9f9;
+    color: #fff;
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 4px;
@@ -58,4 +62,17 @@ button:hover {
 
 .task button {
     margin-right: 10px;
+}
+
+/* Task status colors */
+.task.todo {
+    background-color: #FCDDCD;  /* Orange for 'To Do' */
+}
+
+.task.doing {
+    background-color: #CDEEFD;  /* Blue for 'Doing' */
+}
+
+.task.done {
+    background-color: #CCFCCC;  /* Green for 'Done' */
 }
