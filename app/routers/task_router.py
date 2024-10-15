@@ -8,7 +8,7 @@ from fastapi import status
 
 from app.db.base import get_db
 from app.models.task_models import Task
-from app.schemas.task_schemas import PostTaskRequest, UpdateTaskRequest
+from app.schemas.task_schemas import PostTaskRequest, UpdateTaskRequest, UpdateTaskStatusRequest
 
 router = APIRouter()
 logging.basicConfig(level=logging.INFO)
@@ -55,6 +55,23 @@ def update_task(task_id: int, updated_task: UpdateTaskRequest, db: Session = Dep
         task_from_db.description = updated_task.description
     if updated_task.status:
         task_from_db.status = updated_task.status
+
+    db.merge(task_from_db)
+    db.commit()
+    db.refresh(task_from_db)
+    logger.info(f"task {task_id} updated {task_from_db}")
+    return task_from_db
+
+@router.patch("/{task_id}/status")
+def update_task_status(task_id: int, updated_task: UpdateTaskStatusRequest, db: Session = Depends(get_db)):
+    logger.info(f"got request to update task status {task_id} with {updated_task}")
+
+    task_from_db = db.query(Task).where(Task.id == task_id).first()
+
+    if not task_from_db:
+        raise HTTPException(status_code=404, detail=f"Task not found {task_id}")
+
+    task_from_db.status = updated_task.status
 
     db.merge(task_from_db)
     db.commit()

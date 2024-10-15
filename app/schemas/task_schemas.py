@@ -11,3 +11,6 @@ class UpdateTaskRequest(BaseModel):
     title: str = None
     description: str = None
     status: TaskStatus = None
+
+class UpdateTaskStatusRequest(BaseModel):
+    status: TaskStatus = None

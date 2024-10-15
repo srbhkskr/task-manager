@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="task-form">
+            <input type="text" id="task-title" placeholder="Enter task title" />
+            <textarea id="task-desc" placeholder="Enter task description"></textarea>
+            <button id="create-task-btn">Create Task</button>
+        </div>
+
+        <h2>Your Tasks</h2>
+        <div id="tasks-container">
+            <!-- Tasks will be dynamically populated here -->
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
