@@ -1,8 +1,8 @@
 import os
-from sqlite3 import ProgrammingError
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy.exc import ProgrammingError
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
@@ -14,6 +14,8 @@ from app.main import app
 ADMIN_DATABASE_URL = os.getenv("ADMIN_DATABASE_URL", "postgresql://postgres:root@127.0.0.1/postgres")
 TEST_DATABASE_URL = os.getenv("TEST_DATABASE_URL", "postgresql://postgres:root@127.0.0.1/test_task_manager_db")
 
+os.environ["DATABASE_URL"] = TEST_DATABASE_URL
+
 admin_engine = create_engine(ADMIN_DATABASE_URL, isolation_level="AUTOCOMMIT")
 
 def create_test_database():
@@ -23,9 +25,10 @@ def create_test_database():
             connection.execute(
                 text(f"CREATE DATABASE {TEST_DATABASE_URL.split('/')[-1]}")
             )
-        except ProgrammingError as pe:
-            print(pe)
+        except ProgrammingError as e:
             print("Database already exists, continuing...")
+        except Exception as e:
+            raise SystemError(f"Error while checking db {type(e)}")
 
 engine = create_engine(TEST_DATABASE_URL)
 TestSessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=engine)

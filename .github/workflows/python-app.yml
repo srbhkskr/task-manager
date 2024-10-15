@@ -48,4 +48,5 @@ jobs:
         pip install -r dev-requirements.txt
     - name: Test with pytest
       run: |
+        export DATABASE_URL='postgresql://postgres:root@127.0.0.1/test_task_manager_db'
         pytest
