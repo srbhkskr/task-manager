@@ -46,6 +46,7 @@ async function fetchTasks() {
     const response = await fetch(`${apiUrl}/tasks/`);
     const tasks = await response.json();
 
+    renderTasks(tasks);
     tasksContainer.innerHTML = "";  // Clear current tasks
 
     tasks.forEach(task => {
@@ -54,13 +55,39 @@ async function fetchTasks() {
     });
 }
 
+// Render tasks based on status filter
+function renderTasks(tasks) {
+    const taskList = document.getElementById('tasks-list');
+    taskList.innerHTML = '';
+
+    const selectedStatus = document.getElementById('status-filter').value;
+
+    tasks
+        .filter(task => selectedStatus === 'all' || task.status === selectedStatus)
+        .forEach(task => {
+            const taskElement = document.createElement('div');
+            taskElement.classList.add('task');
+            taskElement.classList.add(task.status.toLowerCase().replace(' ', '-'));  // Add class for styling
+
+            taskElement.innerHTML = `
+                <h3>${task.title}</h3>
+                <p>${task.description}</p>
+                <p>Status: ${task.status}</p>
+                <button onclick="updateTaskStatus(${task.id}, 'Doing')">Doing</button>
+                <button onclick="updateTaskStatus(${task.id}, 'Done')">Done</button>
+                <button onclick="deleteTask(${task.id})">Delete</button>
+            `;
+            taskList.appendChild(taskElement);
+        });
+}
+
 // Create the task DOM element
 function createTaskElement(task) {
     const taskDiv = document.createElement("div");
     taskDiv.classList.add("task");
 
     // Assign a class based on the task status
-    if (task.status === "To Do") {
+    if (task.status === "ToDo") {
         taskDiv.classList.add("todo");
     } else if (task.status === "Doing") {
         taskDiv.classList.add("doing");
@@ -127,4 +154,9 @@ async function deleteTask(taskId) {
     if (response.ok) {
         fetchTasks();  // Refresh task list
     }
+}
+
+// Filter tasks based on the selected status
+function filterTasks() {
+    fetchTasks();
 }

@@ -15,8 +15,19 @@
             <button id="create-task-btn">Create Task</button>
         </div>
 
+        <!-- Status filter dropdown -->
+        <div id="filter-section">
+            <label for="status-filter">Filter by status:</label>
+            <select id="status-filter" onchange="filterTasks()">
+                <option value="all">All</option>
+                <option value="ToDo">To Do</option>
+                <option value="Doing">Doing</option>
+                <option value="Done">Done</option>
+            </select>
+        </div>
+
         <h2>Your Tasks</h2>
-        <div id="tasks-container">
+        <div id="tasks-list">
             <!-- Tasks will be dynamically populated here -->
         </div>
     </div>
