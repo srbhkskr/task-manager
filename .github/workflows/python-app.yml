@@ -16,7 +16,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    # Service containers to run with `container-job`
     services:
       # Label used to access the service container
       postgres:
@@ -31,6 +30,9 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          # Opens tcp port 5432 on the host and service container
+          - 5432:5432
           
     
     steps:
