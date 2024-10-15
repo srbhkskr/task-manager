@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from fastapi import status
 
 from app.db.base import get_db
-from app.models.task_models import Task
+from app.models.task_models import Task, TaskStatus
 from app.schemas.task_schemas import PostTaskRequest, UpdateTaskRequest, UpdateTaskStatusRequest
 
 router = APIRouter()
@@ -27,9 +27,13 @@ def create_task(task: PostTaskRequest, db: Session = Depends(get_db)):
     headers = {"x-task-id": str(task_entity.id)}
     return JSONResponse(content=None, headers=headers, status_code=status.HTTP_201_CREATED)
 
-@router.get("/", )
-def get_tasks(db: Session = Depends(get_db)):
-    logger.info(f"got request to get all tasks")
+@router.get("/")
+def get_tasks(task_status: TaskStatus = None, db: Session = Depends(get_db)):
+    logger.info(f"got request to get all tasks with status {task_status}")
+
+    if task_status is not None:
+        return db.query(Task).where(Task.status == task_status).all()
+
     return db.query(Task).all()
 
 @router.get("/{task_id}")
