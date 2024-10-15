@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -28,4 +27,3 @@ app.include_router(router, prefix = "/tasks")
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Task Manager!"}
-
