@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from app.db.base import Base, get_db
 from app.main import app
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:root@localhost/test_task_manager_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:root@127.0.0.1/test_task_manager_db")
 
 engine = create_engine(DATABASE_URL)
 TestSessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=engine)
