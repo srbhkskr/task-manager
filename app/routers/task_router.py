@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
@@ -8,7 +9,7 @@ from fastapi import status
 
 from app.db.base import get_db
 from app.models.task_models import Task, TaskStatus
-from app.schemas.task_schemas import PostTaskRequest, UpdateTaskRequest, UpdateTaskStatusRequest
+from app.schemas.task_schemas import PostTaskRequest, UpdateTaskRequest, UpdateTaskStatusRequest, GetTask
 
 router = APIRouter()
 logging.basicConfig(level=logging.INFO)
@@ -27,7 +28,7 @@ def create_task(task: PostTaskRequest, db: Session = Depends(get_db)):
     headers = {"x-task-id": str(task_entity.id)}
     return JSONResponse(content=None, headers=headers, status_code=status.HTTP_201_CREATED)
 
-@router.get("/")
+@router.get("/", response_model=List[GetTask])
 def get_tasks(task_status: TaskStatus = None, db: Session = Depends(get_db)):
     logger.info(f"got request to get all tasks with status {task_status}")
 
@@ -36,7 +37,7 @@ def get_tasks(task_status: TaskStatus = None, db: Session = Depends(get_db)):
 
     return db.query(Task).all()
 
-@router.get("/{task_id}")
+@router.get("/{task_id}", response_model=GetTask)
 def get_tasks(task_id: int, db: Session = Depends(get_db)):
     logger.info(f"got request to get tasks {task_id}")
     task_from_db = db.query(Task).where(Task.id == task_id).first()
@@ -44,7 +45,7 @@ def get_tasks(task_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Task not found {task_id}")
     return task_from_db
 
-@router.put("/{task_id}")
+@router.put("/{task_id}", response_model=GetTask)
 def update_task(task_id: int, updated_task: UpdateTaskRequest, db: Session = Depends(get_db)):
     logger.info(f"got request to update task {task_id} with {updated_task}")
 
@@ -66,7 +67,7 @@ def update_task(task_id: int, updated_task: UpdateTaskRequest, db: Session = Dep
     logger.info(f"task {task_id} updated {task_from_db}")
     return task_from_db
 
-@router.patch("/{task_id}/status")
+@router.patch("/{task_id}/status", response_model=GetTask)
 def update_task_status(task_id: int, updated_task: UpdateTaskStatusRequest, db: Session = Depends(get_db)):
     logger.info(f"got request to update task status {task_id} with {updated_task}")
 
