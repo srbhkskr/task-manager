@@ -11,7 +11,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # Allow CORS (Cross-Origin Resource Sharing) to enable JS from the frontend to call the API
 app.add_middleware(
@@ -29,5 +29,3 @@ app.include_router(router, prefix = "/tasks")
 def read_root():
     return {"message": "Welcome to the Task Manager!"}
 
-if __name__ == "__main__":
-    uvicorn.run("task_manager:app", host="127.0.0.1", port=8001, reload=False)
