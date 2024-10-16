@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -22,5 +23,5 @@ class GetTask(BaseModel):
     title: str
     description: str = None
     status: TaskStatus = None
-    updated_at: datetime = None
+    updated_at: Optional[datetime] = None
     created_at: datetime = None
